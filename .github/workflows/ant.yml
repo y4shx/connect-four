@@ -1,25 +1,29 @@
-# This workflow will build a Java project with Ant
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
-
-name: Java CI
+name: Java CI with Ant
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 11
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java
       uses: actions/setup-java@v4
       with:
-        java-version: '11'
-        distribution: 'temurin'
+        distribution: 'temurin' # you can use 'zulu' or others too
+        java-version: '17'       # or '11', depending on your project
+
+    - name: Install Ant
+      run: |
+        sudo apt-get update
+        sudo apt-get install ant
+
     - name: Build with Ant
-      run: ant -noinput -buildfile build.xml
+      run: ant
